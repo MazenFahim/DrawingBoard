@@ -1,28 +1,64 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.layout.VBox?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.canvas.Canvas?>
-<?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.control.ToolBar?>
-<?import javafx.scene.control.ColorPicker?>
-<?import javafx.scene.control.Slider?>
 <?import javafx.scene.control.Button?>
-<VBox alignment="CENTER" spacing="20.0" xmlns:fx="http://javafx.com/fxml"
-      fx:controller="com.mazenfahim.drawingboard.DrawingController" stylesheets="@css/main.css">
+<?import javafx.scene.control.ColorPicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.Slider?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import java.lang.String?>
 
-    <StackPane fx:id="mainStackPane" VBox.vgrow="ALWAYS">
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.mazenfahim.drawingboard.DrawingController"
+      stylesheets="@main.css">
+
+    <!-- ─── Single toolbar ─── -->
+    <HBox styleClass="toolbar-strip" alignment="CENTER_LEFT" spacing="10">
+        <padding>
+            <Insets top="8" right="20" bottom="8" left="20"/>
+        </padding>
+
+        <ColorPicker fx:id="colorPicker" styleClass="color-tool"/>
+
+        <Separator orientation="VERTICAL" styleClass="tool-sep"/>
+
+        <Label text="Brush" styleClass="tool-label"/>
+        <Slider fx:id="brushSize" min="1" max="6" value="3" prefWidth="120"
+                styleClass="brush-slider"/>
+
+        <Separator orientation="VERTICAL" styleClass="tool-sep"/>
+
+        <Button fx:id="clear" text="Clear" styleClass="tool-btn"/>
+
+        <Region HBox.hgrow="ALWAYS"/>
+
+        <Button fx:id="previous" text="&#x276E;" onAction="#previousSlide">
+            <styleClass><String fx:value="tool-btn"/><String fx:value="nav-btn"/></styleClass>
+        </Button>
+
+        <Label fx:id="currentSlide" text="1" styleClass="slide-badge"/>
+
+        <Button fx:id="next" text="&#x276F;" onAction="#nextSlide">
+            <styleClass><String fx:value="tool-btn"/><String fx:value="nav-btn"/></styleClass>
+        </Button>
+
+        <Separator orientation="VERTICAL" styleClass="tool-sep"/>
+
+        <Button fx:id="add" text="+ New Slide" onAction="#addSlide">
+            <styleClass><String fx:value="tool-btn"/><String fx:value="primary-btn"/></styleClass>
+        </Button>
+        <Button fx:id="delete" text="Delete" onAction="#deleteSlide">
+            <styleClass><String fx:value="tool-btn"/><String fx:value="danger-btn"/></styleClass>
+        </Button>
+    </HBox>
+
+    <!-- ─── Canvas area ─── -->
+    <StackPane fx:id="mainStackPane" VBox.vgrow="ALWAYS" styleClass="canvas-area">
         <Canvas fx:id="canvas"/>
-        <ToolBar maxWidth="Infinity" fx:id="toolBar">
-            <ColorPicker fx:id="colorPicker"/>
-            <Slider fx:id="brushSize" min="1" max="6" value="3" showTickLabels="true"
-                    showTickMarks="true"
-                    majorTickUnit="1"/>
-            <Button fx:id="clear" id="clear" text="Clear"/>
-            <Button fx:id="add" id="add" text="add" onAction="#addSlide"/>
-            <Button fx:id="delete" id="delete" text="delete" onAction="#deleteSlide"/>
-            <Button fx:id="next" id="next" text="next" onAction="#nextSlide"/>
-            <Button fx:id="previous" id="previous" text="previous" onAction="#previousSlide"/>
-        </ToolBar>
     </StackPane>
-
 </VBox>
