@@ -1,5 +1,6 @@
 package com.mazenfahim.drawingboard;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
@@ -9,6 +10,7 @@ import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 
@@ -17,10 +19,11 @@ import java.util.ResourceBundle;
 
 public class DrawingController implements Initializable {
     @FXML
-    private Canvas canvas;
+    public Button delete;
     @FXML
-    private ScrollPane canvasContainer;
-
+    private Button add, next, previous;
+    @FXML
+    private Canvas canvas;
     @FXML
     ToolBar toolBar;
     @FXML
@@ -34,10 +37,15 @@ public class DrawingController implements Initializable {
 
     private GraphicsContext gc;
 
+    SlidesHandler currentSlide = new SlidesHandler();
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
-        mainStackPane.setAlignment(toolBar, Pos.BOTTOM_CENTER);
+        canvas.widthProperty().bind(mainStackPane.widthProperty());
+        canvas.heightProperty().bind(mainStackPane.heightProperty());
+
+        mainStackPane.setAlignment(toolBar, Pos.TOP_CENTER);
 
         gc = canvas.getGraphicsContext2D();
 
@@ -48,11 +56,6 @@ public class DrawingController implements Initializable {
 
         brushSize.valueProperty().addListener((obs, oldVal, newVal) -> {
             gc.setLineWidth(newVal.doubleValue());
-        });
-
-        canvasContainer.addEventFilter(ScrollEvent.SCROLL, scrollToEvent -> {
-
-            scrollToEvent.consume();
         });
 
         canvas.setOnMousePressed(event -> {
@@ -78,14 +81,17 @@ public class DrawingController implements Initializable {
             gc.setStroke(newVal);
         });
 
-        canvasContainer.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
-            if (event.getButton() == MouseButton.SECONDARY) {
-                canvasContainer.setPannable(true);
-            }
-        });
+    }
+    @FXML
+    public void deleteSlide(ActionEvent actionEvent) {
+        currentSlide.deleteSlide(mainStackPane);
+    }
+    @FXML
+    public void nextSlide(ActionEvent actionEvent) {
 
-        canvasContainer.addEventHandler(MouseEvent.MOUSE_RELEASED, event -> {
-            canvasContainer.setPannable(false);
-        });
+    }
+    @FXML
+    public void previousSlide(ActionEvent actionEvent) {
+
     }
 }
