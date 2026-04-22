@@ -9,8 +9,6 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.input.ScrollEvent;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 
@@ -37,7 +35,7 @@ public class DrawingController implements Initializable {
 
     private GraphicsContext gc;
 
-    SlidesHandler currentSlide = new SlidesHandler();
+    SlidesHandler Slide;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -82,16 +80,22 @@ public class DrawingController implements Initializable {
         });
 
     }
+
+    @FXML
+    public void addSlide(ActionEvent actionEvent) {
+        Slide = new SlidesHandler();
+    }
+
     @FXML
     public void deleteSlide(ActionEvent actionEvent) {
-        currentSlide.deleteSlide(mainStackPane);
+        Slide.deleteSlide(mainStackPane);
     }
     @FXML
     public void nextSlide(ActionEvent actionEvent) {
-
+        Slide.forward();
     }
     @FXML
     public void previousSlide(ActionEvent actionEvent) {
-
+        Slide.backward();
     }
 }

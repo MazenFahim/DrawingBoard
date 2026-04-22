@@ -28,9 +28,13 @@ public class SlidesHandler {
     }
     public static void forward(){
         currentSlideIndex++;
+        Canvas canvas = slidesList.get(currentSlideIndex);
+        gc =  canvas.getGraphicsContext2D();
     }
     public static void backward(){
         currentSlideIndex--;
+        Canvas canvas = slidesList.get(currentSlideIndex);
+        gc =  canvas.getGraphicsContext2D();
     }
 
 }

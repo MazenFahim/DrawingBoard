@@ -18,7 +18,7 @@
                     showTickMarks="true"
                     majorTickUnit="1"/>
             <Button fx:id="clear" id="clear" text="Clear"/>
-            <Button fx:id="add" id="add" text="add"/>
+            <Button fx:id="add" id="add" text="add" onAction="#addSlide"/>
             <Button fx:id="delete" id="delete" text="delete" onAction="#deleteSlide"/>
             <Button fx:id="next" id="next" text="next" onAction="#nextSlide"/>
             <Button fx:id="previous" id="previous" text="previous" onAction="#previousSlide"/>
