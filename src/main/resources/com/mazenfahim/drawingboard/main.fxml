@@ -15,9 +15,9 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import java.lang.String?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
 
 <!-- Root StackPane lets the top bar float as an overlay -->
-<?import org.kordamp.ikonli.javafx.FontIcon?>
 <StackPane fx:id="rootPane"
            xmlns:fx="http://javafx.com/fxml"
            fx:controller="com.mazenfahim.drawingboard.DrawingController"
@@ -58,11 +58,17 @@
 
             <!-- ── Tools group ── -->
             <HBox styleClass="tool-group" spacing="6" alignment="CENTER">
-                <Button fx:id="clear" text="Clear" styleClass="tool-btn">
+                <Button fx:id="clear" onAction="#clearCanvas" contentDisplay="GRAPHIC_ONLY" styleClass="tool-btn">
+                    <graphic>
+                        <FontIcon iconLiteral="mdi2e-eraser-variant" iconSize="15" iconColor="#475569"/>
+                    </graphic>
                     <tooltip><Tooltip text="Clear canvas (C)"/></tooltip>
                 </Button>
-                <Button fx:id="eraser" text="Eraser" onAction="#toggleEraser" styleClass="tool-btn">
-                    <tooltip><Tooltip text="Toggle eraser"/></tooltip>
+                <Button fx:id="eraser" onAction="#toggleEraser" contentDisplay="GRAPHIC_ONLY" styleClass="tool-btn">
+                    <graphic>
+                        <FontIcon fx:id="eraserIcon" iconLiteral="mdi2e-eraser" iconSize="15" iconColor="#475569"/>
+                    </graphic>
+                    <tooltip><Tooltip text="Toggle eraser (E)"/></tooltip>
                 </Button>
             </HBox>
 
@@ -78,7 +84,10 @@
             <Separator orientation="VERTICAL" styleClass="tool-sep"/>
 
             <!-- ── Theme toggle ── -->
-            <Button fx:id="toggleBg" text="🌙 Dark" onAction="#toggleBackground">
+            <Button fx:id="toggleBg" onAction="#toggleBackground" contentDisplay="GRAPHIC_ONLY">
+                <graphic>
+                    <FontIcon fx:id="themeIcon" iconLiteral="mdi2w-weather-night" iconSize="15" iconColor="#475569"/>
+                </graphic>
                 <tooltip><Tooltip text="Toggle dark/light canvas"/></tooltip>
                 <styleClass>
                     <String fx:value="tool-btn"/>
@@ -89,7 +98,10 @@
 
             <!-- ── Slide navigation group ── -->
             <HBox styleClass="tool-group" spacing="6" alignment="CENTER">
-                <Button text="&#x276E;" onAction="#previousSlide">
+                <Button onAction="#previousSlide" contentDisplay="GRAPHIC_ONLY">
+                    <graphic>
+                        <FontIcon iconLiteral="mdi2c-chevron-left" iconSize="16" iconColor="#475569"/>
+                    </graphic>
                     <tooltip><Tooltip text="Previous slide (←)"/></tooltip>
                     <styleClass>
                         <String fx:value="tool-btn"/>
@@ -99,7 +111,10 @@
 
                 <Label fx:id="currentSlide" text="1" styleClass="slide-badge"/>
 
-                <Button text="&#x276F;" onAction="#nextSlide">
+                <Button onAction="#nextSlide" contentDisplay="GRAPHIC_ONLY">
+                    <graphic>
+                        <FontIcon iconLiteral="mdi2c-chevron-right" iconSize="16" iconColor="#475569"/>
+                    </graphic>
                     <tooltip><Tooltip text="Next slide (→)"/></tooltip>
                     <styleClass>
                         <String fx:value="tool-btn"/>

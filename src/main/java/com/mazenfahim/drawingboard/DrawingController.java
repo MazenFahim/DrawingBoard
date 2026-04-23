@@ -61,6 +61,10 @@ public class DrawingController implements Initializable {
     private Button maximizeButton;
     @FXML
     private Label statusText;
+    @FXML
+    private FontIcon eraserIcon;
+    @FXML
+    private FontIcon themeIcon;
 
     // Top Bar Fields
     private final PauseTransition topBarHideDelay = new PauseTransition(Duration.millis(1200));
@@ -167,6 +171,10 @@ public class DrawingController implements Initializable {
                             clearCanvas();
                             event.consume();
                         }
+                        case E -> {
+                            toggleEraser();
+                            event.consume();
+                        }
                         default -> {
                         }
                     }
@@ -256,15 +264,15 @@ public class DrawingController implements Initializable {
 
         if (eraserActive) {
             eraser.getStyleClass().add("tool-btn-active");
+            eraserIcon.setIconColor(Color.web("#4338ca"));
         } else {
             if (gc != null) {
                 gc.setStroke(colorPicker.getValue());
                 gc.setLineWidth(brushSize.getValue());
             }
             eraser.getStyleClass().remove("tool-btn-active");
-            if (cursorOverlay != null) {
-                cursorOverlay.setVisible(false);
-            }
+            eraserIcon.setIconColor(Color.web("#475569"));
+            if (cursorOverlay != null) cursorOverlay.setVisible(false);
         }
     }
 
@@ -274,7 +282,7 @@ public class DrawingController implements Initializable {
         mainStackPane.setStyle(darkMode
                 ? "-fx-background-color: #000000;"
                 : "-fx-background-color: #ffffff;");
-        toggleBg.setText(darkMode ? "☀ Light" : "🌙 Dark");
+        themeIcon.setIconLiteral(darkMode ? "mdi2w-white-balance-sunny" : "mdi2w-weather-night");
     }
 
     private void switchToCanvas(Canvas c) {
@@ -445,6 +453,7 @@ public class DrawingController implements Initializable {
         }
     }
 
+    @FXML
     private void clearCanvas() {
         gc.clearRect(0, 0, Slide.getCurrentCanvas().getWidth(), Slide.getCurrentCanvas().getHeight());
     }
@@ -588,7 +597,8 @@ public class DrawingController implements Initializable {
     private void updateMaximizeButton() {
         Stage stage = getStage();
         if (stage != null && maximizeButton != null) {
-            maximizeButton.setText(stage.isMaximized() ? "❐" : "□");
+            FontIcon icon = (FontIcon) maximizeButton.getGraphic();
+            icon.setIconLiteral(stage.isMaximized() ? "mdi2w-window-restore" : "mdi2w-window-maximize");
         }
     }
 }
