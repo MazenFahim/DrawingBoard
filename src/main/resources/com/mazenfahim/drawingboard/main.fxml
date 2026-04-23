@@ -34,22 +34,31 @@
         <Separator orientation="VERTICAL" styleClass="tool-sep"/>
 
         <Button fx:id="clear" text="Clear" styleClass="tool-btn"/>
+        <Button fx:id="eraser" text="Eraser" onAction="#toggleEraser" styleClass="tool-btn"/>
+        <Label text="Eraser" styleClass="tool-label"/>
+        <Slider fx:id="eraserSize" min="5" max="40" value="10" prefWidth="100" styleClass="brush-slider"/>
+
+        <Separator orientation="VERTICAL" styleClass="tool-sep"/>
+
+        <Button fx:id="toggleBg" text="🌙 Dark" onAction="#toggleBackground">
+            <styleClass><String fx:value="tool-btn"/></styleClass>
+        </Button>
 
         <Region HBox.hgrow="ALWAYS"/>
 
-        <Button fx:id="previous" text="&#x276E;" onAction="#previousSlide">
+        <Button text="&#x276E;" onAction="#previousSlide">
             <styleClass><String fx:value="tool-btn"/><String fx:value="nav-btn"/></styleClass>
         </Button>
 
         <Label fx:id="currentSlide" text="1" styleClass="slide-badge"/>
 
-        <Button fx:id="next" text="&#x276F;" onAction="#nextSlide">
+        <Button text="&#x276F;" onAction="#nextSlide">
             <styleClass><String fx:value="tool-btn"/><String fx:value="nav-btn"/></styleClass>
         </Button>
 
         <Separator orientation="VERTICAL" styleClass="tool-sep"/>
 
-        <Button fx:id="add" text="+ New Slide" onAction="#addSlide">
+        <Button text="+ New Slide" onAction="#addSlide">
             <styleClass><String fx:value="tool-btn"/><String fx:value="primary-btn"/></styleClass>
         </Button>
         <Button fx:id="delete" text="Delete" onAction="#deleteSlide">

@@ -7,8 +7,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SlidesHandler {
-    private List<Canvas> slidesList = new ArrayList<>();
+    private final List<Canvas> slidesList = new ArrayList<>();
     public int currentSlideIndex = -1;
+
 
     public Canvas addSlide() {
         Canvas canvas = new Canvas();

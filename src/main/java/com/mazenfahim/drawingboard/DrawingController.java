@@ -1,7 +1,6 @@
 package com.mazenfahim.drawingboard;
 
 import javafx.beans.property.SimpleIntegerProperty;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
@@ -22,7 +21,7 @@ public class DrawingController implements Initializable {
     @FXML
     public Label currentSlide;
     @FXML
-    private Button add, next, previous;
+    private Button eraser;
     @FXML
     private Canvas canvas;
 
@@ -34,8 +33,15 @@ public class DrawingController implements Initializable {
     Button clear;
     @FXML
     StackPane mainStackPane;
+    @FXML
+    Slider eraserSize;
+    @FXML
+    Button toggleBg;
+
 
     private GraphicsContext gc;
+    private boolean eraserActive = false;
+    private boolean darkMode = false;
 
     SlidesHandler Slide;
 
@@ -46,7 +52,12 @@ public class DrawingController implements Initializable {
         colorPicker.setValue(Color.BLACK);
 
         brushSize.valueProperty().addListener((obs, oldVal, newVal) -> gc.setLineWidth(newVal.doubleValue()));
-        colorPicker.valueProperty().addListener((obs, oldVal, newVal) -> gc.setStroke(newVal));
+        colorPicker.valueProperty().addListener((obs, oldVal, newVal) -> {
+            eraserActive = false;
+            if (eraser != null) eraser.setStyle("");
+            gc.setStroke(newVal);
+            gc.setLineWidth(brushSize.getValue());
+        });
         javafx.stage.Window.getWindows().addListener(
                 (javafx.collections.ListChangeListener<javafx.stage.Window>) change -> {
                     while (change.next()) {
@@ -67,17 +78,21 @@ public class DrawingController implements Initializable {
         clear.addEventHandler(MouseEvent.MOUSE_CLICKED,
                 event -> gc.clearRect(0, 0, Slide.getCurrentCanvas().getWidth(), Slide.getCurrentCanvas().getHeight()));
 
+        eraserSize.valueProperty().addListener((obs, oldVal, newVal) -> {
+            if (eraserActive) gc.setLineWidth(newVal.doubleValue());
+        });
+
         switchToCanvas(Slide.addSlide());
     }
 
     @FXML
-    public void addSlide(ActionEvent actionEvent) {
+    public void addSlide() {
         switchToCanvas(Slide.addSlide());
         updateCurrentSlide();
     }
 
     @FXML
-    public void deleteSlide(ActionEvent actionEvent) {
+    public void deleteSlide() {
         Slide.deleteSlide(mainStackPane);
         if (Slide.getCurrentCanvas() != null) {
             switchToCanvas(Slide.getCurrentCanvas());
@@ -86,15 +101,36 @@ public class DrawingController implements Initializable {
     }
 
     @FXML
-    public void nextSlide(ActionEvent actionEvent) {
+    public void nextSlide() {
         switchToCanvas(Slide.forward());
         updateCurrentSlide();
     }
 
     @FXML
-    public void previousSlide(ActionEvent actionEvent) {
+    public void previousSlide() {
         switchToCanvas(Slide.backward());
         updateCurrentSlide();
+    }
+
+    @FXML
+    public void toggleEraser() {
+        eraserActive = !eraserActive;
+        if (eraserActive) {
+            eraser.setStyle("-fx-background-color: #eef2ff; -fx-border-color: #6366f1; -fx-text-fill: #6366f1;");
+        } else {
+            gc.setStroke(colorPicker.getValue());
+            gc.setLineWidth(brushSize.getValue());
+            eraser.setStyle("");
+        }
+    }
+
+    @FXML
+    public void toggleBackground() {
+        darkMode = !darkMode;
+        mainStackPane.setStyle(darkMode
+                ? "-fx-background-color: #000000;"
+                : "-fx-background-color: #ffffff;");
+        toggleBg.setText(darkMode ? "☀ Light" : "🌙 Dark");
     }
 
     private void switchToCanvas(Canvas c) {
@@ -103,21 +139,34 @@ public class DrawingController implements Initializable {
         gc = canvas.getGraphicsContext2D();
         gc.setStroke(colorPicker.getValue());
         gc.setLineWidth(brushSize.getValue());
+        eraserActive = false;
+        if (eraser != null) eraser.setStyle("");
         setupCanvas(canvas);
     }
 
     private void setupCanvas(Canvas c) {
         c.setOnMousePressed(event -> {
             if (event.getButton() == MouseButton.PRIMARY) {
-                gc.beginPath();
-                gc.moveTo(event.getX(), event.getY());
-                gc.stroke();
+                if (eraserActive) {
+                    double size = eraserSize.getValue();
+                    gc.clearRect(event.getX() - size / 2, event.getY() - size / 2, size, size);
+                } else {
+                    gc.beginPath();
+                    gc.moveTo(event.getX(), event.getY());
+                    gc.stroke();
+                }
             }
         });
+
         c.setOnMouseDragged(e -> {
             if (e.getButton() == MouseButton.PRIMARY) {
-                gc.lineTo(e.getX(), e.getY());
-                gc.stroke();
+                if (eraserActive) {
+                    double size = eraserSize.getValue();
+                    gc.clearRect(e.getX() - size / 2, e.getY() - size / 2, size, size);
+                } else {
+                    gc.lineTo(e.getX(), e.getY());
+                    gc.stroke();
+                }
             }
         });
     }
@@ -135,4 +184,5 @@ public class DrawingController implements Initializable {
             currentSlide.textProperty().bind(new SimpleIntegerProperty(currentSlideIndex).asString());
         }
     }
+
 }
