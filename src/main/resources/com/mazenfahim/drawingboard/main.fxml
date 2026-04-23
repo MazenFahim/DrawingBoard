@@ -18,7 +18,7 @@
       stylesheets="@main.css">
 
     <!-- ─── Single toolbar ─── -->
-    <HBox styleClass="toolbar-strip" alignment="CENTER_LEFT" spacing="10">
+    <HBox fx:id="toolBar" styleClass="toolbar-strip" alignment="CENTER_LEFT" spacing="10">
         <padding>
             <Insets top="8" right="20" bottom="8" left="20"/>
         </padding>

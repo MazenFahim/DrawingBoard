@@ -8,6 +8,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -20,6 +21,8 @@ public class DrawingController implements Initializable {
     public Button delete;
     @FXML
     public Label currentSlide;
+    @FXML
+    public HBox toolBar;
     @FXML
     private Button eraser;
     @FXML
@@ -50,7 +53,6 @@ public class DrawingController implements Initializable {
         Slide = new SlidesHandler();
 
         colorPicker.setValue(Color.BLACK);
-
         brushSize.valueProperty().addListener((obs, oldVal, newVal) -> gc.setLineWidth(newVal.doubleValue()));
         colorPicker.valueProperty().addListener((obs, oldVal, newVal) -> {
             eraserActive = false;
@@ -76,13 +78,27 @@ public class DrawingController implements Initializable {
                     }
                 });
         clear.addEventHandler(MouseEvent.MOUSE_CLICKED,
-                event -> gc.clearRect(0, 0, Slide.getCurrentCanvas().getWidth(), Slide.getCurrentCanvas().getHeight()));
+                event -> clearCanvas()
+        );
 
         eraserSize.valueProperty().addListener((obs, oldVal, newVal) -> {
             if (eraserActive) gc.setLineWidth(newVal.doubleValue());
         });
 
         switchToCanvas(Slide.addSlide());
+
+        mainStackPane.sceneProperty().addListener((obs, oldScene, newScene) -> {
+            if (newScene != null) {
+                newScene.addEventFilter(javafx.scene.input.KeyEvent.KEY_PRESSED, event -> {
+                    switch (event.getCode()) {
+                        case RIGHT -> { switchToCanvas(Slide.forward()); updateCurrentSlide(); event.consume(); }
+                        case LEFT  -> { switchToCanvas(Slide.backward()); updateCurrentSlide(); event.consume(); }
+                        case C -> { clearCanvas(); event.consume(); }
+                        default    -> {}
+                    }
+                });
+            }
+        });
     }
 
     @FXML
@@ -183,6 +199,10 @@ public class DrawingController implements Initializable {
             int currentSlideIndex = Slide.currentSlideIndex + 1;
             currentSlide.textProperty().bind(new SimpleIntegerProperty(currentSlideIndex).asString());
         }
+    }
+
+    private void clearCanvas() {
+        gc.clearRect(0, 0, Slide.getCurrentCanvas().getWidth(), Slide.getCurrentCanvas().getHeight());
     }
 
 }
