@@ -40,3 +40,4 @@ build/
 ### Mac OS ###
 .DS_Store
 /.mvn/wrapper/maven-wrapper.jar
+/dist-clean/EasyBrush-1.0.exe
