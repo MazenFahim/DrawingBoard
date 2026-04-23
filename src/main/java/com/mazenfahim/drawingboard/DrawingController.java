@@ -22,6 +22,7 @@ import javafx.animation.PauseTransition;
 import javafx.animation.TranslateTransition;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
+import org.kordamp.ikonli.javafx.FontIcon;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -561,11 +562,12 @@ public class DrawingController implements Initializable {
 
     @FXML
     private void toggleMaximizeWindow() {
-        Stage stage = getStage();
-        if (stage != null) {
-            stage.setMaximized(!stage.isMaximized());
-            updateMaximizeButton();
-        }
+        Stage stage = (Stage) maximizeButton.getScene().getWindow();
+        boolean maximized = stage.isMaximized();
+        stage.setMaximized(!maximized);
+
+        FontIcon icon = (FontIcon) maximizeButton.getGraphic();
+        icon.setIconLiteral(maximized ? "mdi2w-window-maximize" : "mdi2w-window-restore");
     }
 
     @FXML

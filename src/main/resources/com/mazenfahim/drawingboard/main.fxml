@@ -17,6 +17,7 @@
 <?import java.lang.String?>
 
 <!-- Root StackPane lets the top bar float as an overlay -->
+<?import org.kordamp.ikonli.javafx.FontIcon?>
 <StackPane fx:id="rootPane"
            xmlns:fx="http://javafx.com/fxml"
            fx:controller="com.mazenfahim.drawingboard.DrawingController"
@@ -146,21 +147,30 @@
             <Label text="✦  Draw freely on the canvas" styleClass="window-hint"/>
 
             <HBox alignment="CENTER_RIGHT" spacing="6">
-                <Button text="—" onAction="#minimizeWindow">
+                <Button onAction="#minimizeWindow" contentDisplay="GRAPHIC_ONLY">
+                    <graphic>
+                        <FontIcon iconLiteral="mdi2m-minus" iconSize="14" iconColor="white"/>
+                    </graphic>
                     <tooltip><Tooltip text="Minimize"/></tooltip>
                     <styleClass>
                         <String fx:value="window-action-btn"/>
                     </styleClass>
                 </Button>
 
-                <Button fx:id="maximizeButton" text="□" onAction="#toggleMaximizeWindow">
+                <Button fx:id="maximizeButton" onAction="#toggleMaximizeWindow" contentDisplay="GRAPHIC_ONLY">
+                    <graphic>
+                        <FontIcon iconLiteral="mdi2w-window-maximize" iconSize="14" iconColor="white"/>
+                    </graphic>
                     <tooltip><Tooltip text="Maximize"/></tooltip>
                     <styleClass>
                         <String fx:value="window-action-btn"/>
                     </styleClass>
                 </Button>
 
-                <Button text="✕" onAction="#closeWindow">
+                <Button onAction="#closeWindow" contentDisplay="GRAPHIC_ONLY">
+                    <graphic>
+                        <FontIcon iconLiteral="mdi2c-close" iconSize="14" iconColor="white"/>
+                    </graphic>
                     <tooltip><Tooltip text="Close"/></tooltip>
                     <styleClass>
                         <String fx:value="window-action-btn"/>
