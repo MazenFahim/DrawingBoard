@@ -65,6 +65,10 @@
                             <noManPages>true</noManPages>
                             <stripDebug>true</stripDebug>
                             <noHeaderFiles>true</noHeaderFiles>
+                            <options>
+                                <option>--enable-native-access=javafx.graphics</option>
+                                <option>--sun-misc-unsafe-memory-access=allow</option>
+                            </options>
                         </configuration>
                     </execution>
                 </executions>
