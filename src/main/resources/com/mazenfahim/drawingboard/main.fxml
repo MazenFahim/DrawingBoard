@@ -7,67 +7,167 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.Slider?>
+<?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import java.lang.String?>
 
-<VBox xmlns:fx="http://javafx.com/fxml"
-      fx:controller="com.mazenfahim.drawingboard.DrawingController"
-      stylesheets="@main.css">
+<!-- Root StackPane lets the top bar float as an overlay -->
+<StackPane fx:id="rootPane"
+           xmlns:fx="http://javafx.com/fxml"
+           fx:controller="com.mazenfahim.drawingboard.DrawingController"
+           stylesheets="@main.css"
+           onMouseMoved="#handleRootMouseMove"
+           onMouseExited="#handleRootMouseExit">
 
-    <!-- ─── Single toolbar ─── -->
-    <HBox fx:id="toolBar" styleClass="toolbar-strip" alignment="CENTER_LEFT" spacing="10">
-        <padding>
-            <Insets top="8" right="20" bottom="8" left="20"/>
-        </padding>
+    <!-- ─── Main content layer ─── -->
+    <VBox fx:id="rootBox">
 
-        <ColorPicker fx:id="colorPicker" styleClass="color-tool"/>
+        <!-- ─── Canvas area ─── -->
+        <StackPane fx:id="mainStackPane" VBox.vgrow="ALWAYS" styleClass="canvas-area">
+            <Canvas fx:id="canvas"/>
+        </StackPane>
 
-        <Separator orientation="VERTICAL" styleClass="tool-sep"/>
+        <!-- ─── Bottom toolbar ─── -->
+        <HBox fx:id="toolBar" styleClass="toolbar-strip" alignment="CENTER_LEFT" spacing="8">
+            <padding>
+                <Insets top="8" right="16" bottom="8" left="16"/>
+            </padding>
 
-        <Label text="Brush" styleClass="tool-label"/>
-        <Slider fx:id="brushSize" min="1" max="6" value="3" prefWidth="120"
-                styleClass="brush-slider"/>
+            <!-- ── Color group ── -->
+            <HBox styleClass="tool-group" spacing="6" alignment="CENTER">
+                <Label text="COLOR" styleClass="tool-label"/>
+                <ColorPicker fx:id="colorPicker" styleClass="color-tool">
+                    <tooltip><Tooltip text="Pick brush color"/></tooltip>
+                </ColorPicker>
+            </HBox>
 
-        <Separator orientation="VERTICAL" styleClass="tool-sep"/>
+            <!-- ── Brush group ── -->
+            <HBox styleClass="tool-group" spacing="6" alignment="CENTER">
+                <Label text="BRUSH" styleClass="tool-label"/>
+                <Slider fx:id="brushSize" min="1" max="6" value="3" prefWidth="110"
+                        styleClass="brush-slider">
+                    <tooltip><Tooltip text="Brush size"/></tooltip>
+                </Slider>
+            </HBox>
 
-        <Button fx:id="clear" text="Clear" styleClass="tool-btn"/>
-        <Button fx:id="eraser" text="Eraser" onAction="#toggleEraser" styleClass="tool-btn"/>
-        <Label text="Eraser" styleClass="tool-label"/>
-        <Slider fx:id="eraserSize" min="5" max="40" value="10" prefWidth="100" styleClass="brush-slider"/>
+            <!-- ── Tools group ── -->
+            <HBox styleClass="tool-group" spacing="6" alignment="CENTER">
+                <Button fx:id="clear" text="Clear" styleClass="tool-btn">
+                    <tooltip><Tooltip text="Clear canvas (C)"/></tooltip>
+                </Button>
+                <Button fx:id="eraser" text="Eraser" onAction="#toggleEraser" styleClass="tool-btn">
+                    <tooltip><Tooltip text="Toggle eraser"/></tooltip>
+                </Button>
+            </HBox>
 
-        <Separator orientation="VERTICAL" styleClass="tool-sep"/>
+            <!-- ── Eraser size group ── -->
+            <HBox styleClass="tool-group" spacing="6" alignment="CENTER">
+                <Label text="ERASER" styleClass="tool-label"/>
+                <Slider fx:id="eraserSize" min="5" max="40" value="10" prefWidth="90"
+                        styleClass="brush-slider">
+                    <tooltip><Tooltip text="Eraser size"/></tooltip>
+                </Slider>
+            </HBox>
 
-        <Button fx:id="toggleBg" text="🌙 Dark" onAction="#toggleBackground">
-            <styleClass><String fx:value="tool-btn"/></styleClass>
-        </Button>
+            <Separator orientation="VERTICAL" styleClass="tool-sep"/>
 
-        <Region HBox.hgrow="ALWAYS"/>
+            <!-- ── Theme toggle ── -->
+            <Button fx:id="toggleBg" text="🌙 Dark" onAction="#toggleBackground">
+                <tooltip><Tooltip text="Toggle dark/light canvas"/></tooltip>
+                <styleClass>
+                    <String fx:value="tool-btn"/>
+                </styleClass>
+            </Button>
 
-        <Button text="&#x276E;" onAction="#previousSlide">
-            <styleClass><String fx:value="tool-btn"/><String fx:value="nav-btn"/></styleClass>
-        </Button>
+            <Region HBox.hgrow="ALWAYS"/>
 
-        <Label fx:id="currentSlide" text="1" styleClass="slide-badge"/>
+            <!-- ── Slide navigation group ── -->
+            <HBox styleClass="tool-group" spacing="6" alignment="CENTER">
+                <Button text="&#x276E;" onAction="#previousSlide">
+                    <tooltip><Tooltip text="Previous slide (←)"/></tooltip>
+                    <styleClass>
+                        <String fx:value="tool-btn"/>
+                        <String fx:value="nav-btn"/>
+                    </styleClass>
+                </Button>
 
-        <Button text="&#x276F;" onAction="#nextSlide">
-            <styleClass><String fx:value="tool-btn"/><String fx:value="nav-btn"/></styleClass>
-        </Button>
+                <Label fx:id="currentSlide" text="1" styleClass="slide-badge"/>
 
-        <Separator orientation="VERTICAL" styleClass="tool-sep"/>
+                <Button text="&#x276F;" onAction="#nextSlide">
+                    <tooltip><Tooltip text="Next slide (→)"/></tooltip>
+                    <styleClass>
+                        <String fx:value="tool-btn"/>
+                        <String fx:value="nav-btn"/>
+                    </styleClass>
+                </Button>
+            </HBox>
 
-        <Button text="+ New Slide" onAction="#addSlide">
-            <styleClass><String fx:value="tool-btn"/><String fx:value="primary-btn"/></styleClass>
-        </Button>
-        <Button fx:id="delete" text="Delete" onAction="#deleteSlide">
-            <styleClass><String fx:value="tool-btn"/><String fx:value="danger-btn"/></styleClass>
-        </Button>
-    </HBox>
+            <Button text="+ New Slide" onAction="#addSlide">
+                <tooltip><Tooltip text="Add new slide"/></tooltip>
+                <styleClass>
+                    <String fx:value="tool-btn"/>
+                    <String fx:value="primary-btn"/>
+                </styleClass>
+            </Button>
 
-    <!-- ─── Canvas area ─── -->
-    <StackPane fx:id="mainStackPane" VBox.vgrow="ALWAYS" styleClass="canvas-area">
-        <Canvas fx:id="canvas"/>
-    </StackPane>
-</VBox>
+            <Button fx:id="delete" text="Delete" onAction="#deleteSlide">
+                <tooltip><Tooltip text="Delete current slide"/></tooltip>
+                <styleClass>
+                    <String fx:value="tool-btn"/>
+                    <String fx:value="danger-btn"/>
+                </styleClass>
+            </Button>
+        </HBox>
+    </VBox>
+
+    <!-- ─── Floating top bar overlay (doesn't affect layout below) ─── -->
+    <VBox pickOnBounds="false">
+        <HBox fx:id="topBar" styleClass="window-bar" alignment="CENTER_LEFT" spacing="14">
+            <padding>
+                <Insets top="10" right="16" bottom="10" left="16"/>
+            </padding>
+
+            <ImageView fitWidth="34" fitHeight="34" pickOnBounds="true" preserveRatio="true">
+                <Image url="@icons/EasyBrush1.png"/>
+            </ImageView>
+
+            <VBox>
+                <Label text="EasyBrush" styleClass="app-title"/>
+                <Label text="Creative drawing workspace" styleClass="app-subtitle"/>
+            </VBox>
+
+            <Region HBox.hgrow="ALWAYS"/>
+
+            <Label text="✦  Draw freely on the canvas" styleClass="window-hint"/>
+
+            <HBox alignment="CENTER_RIGHT" spacing="6">
+                <Button text="—" onAction="#minimizeWindow">
+                    <tooltip><Tooltip text="Minimize"/></tooltip>
+                    <styleClass>
+                        <String fx:value="window-action-btn"/>
+                    </styleClass>
+                </Button>
+
+                <Button fx:id="maximizeButton" text="□" onAction="#toggleMaximizeWindow">
+                    <tooltip><Tooltip text="Maximize"/></tooltip>
+                    <styleClass>
+                        <String fx:value="window-action-btn"/>
+                    </styleClass>
+                </Button>
+
+                <Button text="✕" onAction="#closeWindow">
+                    <tooltip><Tooltip text="Close"/></tooltip>
+                    <styleClass>
+                        <String fx:value="window-action-btn"/>
+                        <String fx:value="window-close-btn"/>
+                    </styleClass>
+                </Button>
+            </HBox>
+        </HBox>
+    </VBox>
+</StackPane>

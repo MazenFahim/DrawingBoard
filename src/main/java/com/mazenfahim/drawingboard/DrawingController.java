@@ -16,23 +16,59 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.StrokeType;
 import javafx.stage.Stage;
+import javafx.animation.FadeTransition;
+import javafx.animation.ParallelTransition;
+import javafx.animation.PauseTransition;
+import javafx.animation.TranslateTransition;
+import javafx.scene.layout.VBox;
+import javafx.util.Duration;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
 public class DrawingController implements Initializable {
-    @FXML public Button delete;
-    @FXML public Label currentSlide;
-    @FXML public HBox toolBar;
-    @FXML private Button eraser;
-    @FXML private Canvas canvas;
+    @FXML
+    public Button delete;
+    @FXML
+    public Label currentSlide;
+    @FXML
+    public HBox toolBar;
+    @FXML
+    private Button eraser;
+    @FXML
+    private Canvas canvas;
 
-    @FXML ColorPicker colorPicker;
-    @FXML Slider brushSize;
-    @FXML Button clear;
-    @FXML StackPane mainStackPane;
-    @FXML Slider eraserSize;
-    @FXML Button toggleBg;
+    @FXML
+    ColorPicker colorPicker;
+    @FXML
+    Slider brushSize;
+    @FXML
+    Button clear;
+    @FXML
+    StackPane mainStackPane;
+    @FXML
+    Slider eraserSize;
+    @FXML
+    Button toggleBg;
+    @FXML
+    private StackPane rootPane;
+    @FXML
+    private VBox rootBox;
+    @FXML
+    private HBox topBar;
+    @FXML
+    private Button maximizeButton;
+    @FXML
+    private Label statusText;
+
+    // Top Bar Fields
+    private final PauseTransition topBarHideDelay = new PauseTransition(Duration.millis(1200));
+    private boolean topBarVisible = true;
+    private double dragOffsetX;
+    private double dragOffsetY;
+
+    private static final double TOP_REVEAL_ZONE = 6;
+    private static final double TOP_BAR_HIDE_OFFSET = -18;
 
     private GraphicsContext gc;
     private boolean eraserActive = false;
@@ -66,8 +102,10 @@ public class DrawingController implements Initializable {
             eraserActive = false;
             hasLastEraserPoint = false;
 
-            if (eraser != null) eraser.setStyle("");
-            if (cursorOverlay != null) cursorOverlay.setVisible(false);
+            if (eraser != null)
+                eraser.getStyleClass().remove("tool-btn-active");
+            if (cursorOverlay != null)
+                cursorOverlay.setVisible(false);
 
             if (gc != null) {
                 gc.setStroke(newVal);
@@ -78,8 +116,10 @@ public class DrawingController implements Initializable {
         // Update preview circle size live as slider moves
         eraserSize.valueProperty().addListener((obs, oldVal, newVal) -> {
             double r = newVal.doubleValue() / 2.0;
-            if (innerRing != null) innerRing.setRadius(r);
-            if (outerRing != null) outerRing.setRadius(r);
+            if (innerRing != null)
+                innerRing.setRadius(r);
+            if (outerRing != null)
+                outerRing.setRadius(r);
         });
 
         javafx.stage.Window.getWindows().addListener(
@@ -132,6 +172,19 @@ public class DrawingController implements Initializable {
                 });
             }
         });
+
+        rootBox.sceneProperty().addListener((obs, oldScene, newScene) -> {
+            if (newScene != null) {
+                newScene.windowProperty().addListener((windowObs, oldWindow, newWindow) -> {
+                    if (newWindow instanceof Stage stage) {
+                        stage.maximizedProperty().addListener((o, oldVal, newVal) -> updateMaximizeButton());
+                        updateMaximizeButton();
+                    }
+                });
+            }
+        });
+
+        setupWindowBar();
     }
 
     private void buildEraserPreview() {
@@ -201,13 +254,13 @@ public class DrawingController implements Initializable {
         hasLastEraserPoint = false;
 
         if (eraserActive) {
-            eraser.setStyle("-fx-background-color: #eef2ff; -fx-border-color: #6366f1; -fx-text-fill: #6366f1;");
+            eraser.getStyleClass().add("tool-btn-active");
         } else {
             if (gc != null) {
                 gc.setStroke(colorPicker.getValue());
                 gc.setLineWidth(brushSize.getValue());
             }
-            eraser.setStyle("");
+            eraser.getStyleClass().remove("tool-btn-active");
             if (cursorOverlay != null) {
                 cursorOverlay.setVisible(false);
             }
@@ -234,12 +287,15 @@ public class DrawingController implements Initializable {
         eraserActive = false;
         hasLastEraserPoint = false;
 
-        if (eraser != null) eraser.setStyle("");
-        if (cursorOverlay != null) cursorOverlay.setVisible(false);
+        if (eraser != null)
+            eraser.getStyleClass().remove("tool-btn-active");
+        if (cursorOverlay != null)
+            cursorOverlay.setVisible(false);
 
         setupCanvas(canvas);
 
-        if (cursorOverlay != null) cursorOverlay.toFront();
+        if (cursorOverlay != null)
+            cursorOverlay.toFront();
     }
 
     private void setupCanvas(Canvas c) {
@@ -354,10 +410,12 @@ public class DrawingController implements Initializable {
         int canvasHeight = (int) canvas.getHeight();
 
         for (int y = minY; y <= maxY; y++) {
-            if (y < 0 || y >= canvasHeight) continue;
+            if (y < 0 || y >= canvasHeight)
+                continue;
 
             for (int x = minX; x <= maxX; x++) {
-                if (x < 0 || x >= canvasWidth) continue;
+                if (x < 0 || x >= canvasWidth)
+                    continue;
 
                 double dx = (x + 0.5) - centerX;
                 double dy = (y + 0.5) - centerY;
@@ -380,10 +438,155 @@ public class DrawingController implements Initializable {
         if (Slide.getCurrentCanvas() != null) {
             int idx = Slide.currentSlideIndex + 1;
             currentSlide.textProperty().bind(new SimpleIntegerProperty(idx).asString());
+            if (statusText != null) {
+                statusText.setText("Ready  ·  Slide " + idx);
+            }
         }
     }
 
     private void clearCanvas() {
         gc.clearRect(0, 0, Slide.getCurrentCanvas().getWidth(), Slide.getCurrentCanvas().getHeight());
+    }
+
+    private void setupWindowBar() {
+        topBarHideDelay.setOnFinished(e -> {
+            if (!topBar.isHover()) {
+                animateTopBar(false);
+            }
+        });
+
+        topBar.setOnMousePressed(event -> {
+            Stage stage = getStage();
+            if (stage == null)
+                return;
+
+            dragOffsetX = event.getSceneX();
+            dragOffsetY = event.getSceneY();
+        });
+
+        topBar.setOnMouseDragged(event -> {
+            Stage stage = getStage();
+            if (stage == null || stage.isMaximized())
+                return;
+
+            stage.setX(event.getScreenX() - dragOffsetX);
+            stage.setY(event.getScreenY() - dragOffsetY);
+        });
+
+        topBar.setOnMouseClicked(event -> {
+            if (event.getClickCount() == 2) {
+                toggleMaximizeWindow();
+            }
+        });
+
+        topBar.setOnMouseEntered(event -> showTopBarNow());
+
+        topBar.setOnMouseExited(event -> {
+            if (!topBar.isHover()) {
+                scheduleTopBarHide();
+            }
+        });
+    }
+
+    @FXML
+    private void handleRootMouseMove(MouseEvent event) {
+        if (event.getY() <= TOP_REVEAL_ZONE) {
+            showTopBarNow();
+        } else if (!topBar.isHover()) {
+            scheduleTopBarHide();
+        }
+    }
+
+    @FXML
+    private void handleRootMouseExit(MouseEvent event) {
+        scheduleTopBarHide();
+    }
+
+    private void showTopBarNow() {
+        topBarHideDelay.stop();
+        animateTopBar(true);
+    }
+
+    private void scheduleTopBarHide() {
+        topBarHideDelay.stop();
+
+        if (!topBarVisible || topBar.isHover()) {
+            return;
+        }
+
+        topBarHideDelay.playFromStart();
+    }
+
+    private void animateTopBar(boolean show) {
+        if (topBarVisible == show) {
+            return;
+        }
+
+        topBarVisible = show;
+
+        if (show) {
+            topBar.setVisible(true);
+            topBar.setOpacity(0);
+            topBar.setTranslateY(TOP_BAR_HIDE_OFFSET);
+
+            FadeTransition fade = new FadeTransition(Duration.millis(180), topBar);
+            fade.setToValue(1);
+
+            TranslateTransition slide = new TranslateTransition(Duration.millis(180), topBar);
+            slide.setToY(0);
+
+            new ParallelTransition(fade, slide).play();
+        } else {
+            FadeTransition fade = new FadeTransition(Duration.millis(160), topBar);
+            fade.setToValue(0);
+
+            TranslateTransition slide = new TranslateTransition(Duration.millis(160), topBar);
+            slide.setToY(TOP_BAR_HIDE_OFFSET);
+
+            ParallelTransition transition = new ParallelTransition(fade, slide);
+            transition.setOnFinished(e -> {
+                topBar.setVisible(false);
+            });
+            transition.play();
+        }
+    }
+
+    @FXML
+    private void minimizeWindow() {
+        Stage stage = getStage();
+        if (stage != null) {
+            stage.setIconified(true);
+        }
+    }
+
+    @FXML
+    private void toggleMaximizeWindow() {
+        Stage stage = getStage();
+        if (stage != null) {
+            stage.setMaximized(!stage.isMaximized());
+            updateMaximizeButton();
+        }
+    }
+
+    @FXML
+    private void closeWindow() {
+        Stage stage = getStage();
+        if (stage != null) {
+            stage.close();
+        }
+    }
+
+    private Stage getStage() {
+        if (rootBox == null || rootBox.getScene() == null) {
+            return null;
+        }
+        return (Stage) rootBox.getScene().getWindow();
+    }
+
+    private void updateMaximizeButton() {
+        Stage stage = getStage();
+        if (stage != null && maximizeButton != null) {
+            maximizeButton.setText(stage.isMaximized() ? "❐" : "□");
+        }
     }
 }

@@ -1,5 +1,5 @@
 /* ================================================================
-   Drawing Board – clean modern theme
+   EasyBrush – Premium Modern Theme
    ================================================================ */
 
 /* ── Root ── */
@@ -8,38 +8,126 @@
     -fx-background-color: #f0f2f5;
 }
 
-/* ── Slide badge (between nav arrows) ── */
-.slide-badge {
-    -fx-background-color: #f1f5f9;
-    -fx-background-radius: 6;
-    -fx-border-color: #cbd5e1;
-    -fx-border-radius: 6;
-    -fx-border-width: 1;
-    -fx-text-fill: #334155;
-    -fx-font-size: 12px;
-    -fx-font-weight: 800;
-    -fx-padding: 4 12 4 12;
-    -fx-min-width: 32;
-    -fx-alignment: center;
+/* ================================================================
+   Custom window bar
+   ================================================================ */
+
+.window-bar {
+    -fx-background-color: linear-gradient(to right, #1e1b4b, #312e81, #3730a3);
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
+    -fx-min-height: 56;
+    -fx-pref-height: 56;
+    -fx-effect: dropshadow(gaussian, rgba(30, 27, 75, 0.35), 20, 0.15, 0, 3);
 }
 
-/* ── Toolbar strip ── */
+.app-mark {
+    -fx-min-width: 36;
+    -fx-min-height: 36;
+    -fx-pref-width: 36;
+    -fx-pref-height: 36;
+    -fx-background-radius: 10;
+    -fx-background-color: linear-gradient(to bottom right, #f59e0b, #f97316);
+    -fx-effect: dropshadow(gaussian, rgba(249, 115, 22, 0.55), 14, 0.3, 0, 2);
+}
+
+.app-mark-letter {
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-font-weight: 800;
+}
+
+.app-title {
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 15px;
+    -fx-font-weight: 800;
+}
+
+.app-subtitle {
+    -fx-text-fill: rgba(255, 255, 255, 0.55);
+    -fx-font-size: 11px;
+    -fx-font-weight: 600;
+}
+
+.window-hint {
+    -fx-text-fill: rgba(255, 255, 255, 0.7);
+    -fx-font-size: 11px;
+    -fx-font-weight: 600;
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+    -fx-border-color: rgba(255, 255, 255, 0.15);
+    -fx-border-radius: 999;
+    -fx-background-radius: 999;
+    -fx-padding: 5 14 5 14;
+}
+
+.window-action-btn {
+    -fx-cursor: hand;
+    -fx-font-family: "Segoe UI", system;
+    -fx-font-size: 13px;
+    -fx-font-weight: 700;
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+    -fx-border-width: 1;
+    -fx-pref-width: 34;
+    -fx-pref-height: 30;
+    -fx-min-width: 34;
+    -fx-min-height: 30;
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+    -fx-border-color: rgba(255, 255, 255, 0.15);
+    -fx-text-fill: rgba(255, 255, 255, 0.8);
+    -fx-padding: 0;
+}
+
+.window-action-btn:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.2);
+    -fx-border-color: rgba(255, 255, 255, 0.3);
+    -fx-text-fill: #ffffff;
+}
+
+.window-action-btn:pressed {
+    -fx-scale-x: 0.94;
+    -fx-scale-y: 0.94;
+}
+
+.window-close-btn:hover {
+    -fx-background-color: #ef4444;
+    -fx-border-color: #ef4444;
+    -fx-text-fill: white;
+}
+
+/* ================================================================
+   Toolbar strip
+   ================================================================ */
+
 .toolbar-strip {
     -fx-background-color: #ffffff;
     -fx-border-color: #e2e8f0;
-    -fx-border-width: 0 0 1 0;
-    -fx-min-height: 48;
-    -fx-pref-height: 48;
+    -fx-border-width: 1 0 0 0;
+    -fx-min-height: 52;
+    -fx-pref-height: 52;
+    -fx-effect: dropshadow(gaussian, rgba(15, 23, 42, 0.04), 6, 0.1, 0, 2);
+}
+
+/* ── Tool group panels ── */
+.tool-group {
+    -fx-background-color: #f8fafc;
+    -fx-background-radius: 10;
+    -fx-border-color: #e2e8f0;
+    -fx-border-radius: 10;
+    -fx-border-width: 1;
+    -fx-padding: 4 10 4 10;
+    -fx-alignment: center;
 }
 
 .tool-label {
-    -fx-text-fill: #64748b;
-    -fx-font-size: 11px;
-    -fx-font-weight: 700;
+    -fx-text-fill: #94a3b8;
+    -fx-font-size: 10px;
+    -fx-font-weight: 800;
+    -fx-padding: 0 4 0 0;
 }
 
 .tool-sep {
-    -fx-padding: 2 4 2 4;
+    -fx-padding: 4 2 4 2;
 }
 
 .tool-sep .line {
@@ -47,22 +135,27 @@
     -fx-border-width: 0 0 0 1;
 }
 
-/* ── Color picker ── */
+/* ================================================================
+   Color picker
+   ================================================================ */
+
 .color-tool {
-    -fx-background-color: transparent;
-    -fx-background-radius: 6;
-    -fx-border-radius: 6;
-    -fx-border-color: #cbd5e1;
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+    -fx-border-color: #e2e8f0;
     -fx-border-width: 1;
     -fx-pref-width: 100;
-    -fx-pref-height: 30;
+    -fx-pref-height: 32;
     -fx-min-width: 40;
-    -fx-min-height: 30;
+    -fx-min-height: 32;
     -fx-padding: 0;
+    -fx-effect: dropshadow(gaussian, rgba(15, 23, 42, 0.06), 4, 0.1, 0, 1);
 }
 
 .color-tool:hover {
-    -fx-border-color: #6366f1;
+    -fx-border-color: #818cf8;
+    -fx-effect: dropshadow(gaussian, rgba(99, 102, 241, 0.2), 8, 0.15, 0, 1);
 }
 
 /* The color indicator swatch */
@@ -71,12 +164,12 @@
 }
 
 .color-tool .color-picker-label .picker-color {
-    -fx-background-radius: 4;
+    -fx-background-radius: 5;
     -fx-padding: 0;
 }
 
 .color-tool .color-picker-label .picker-color .color-rect {
-    -fx-background-radius: 4;
+    -fx-background-radius: 5;
 }
 
 /* Hide the dropdown arrow entirely for a cleaner look */
@@ -86,16 +179,19 @@
 }
 
 .color-tool .arrow-button .arrow {
-    -fx-background-color: #64748b;
-    -fx-padding: 4;
+    -fx-background-color: #94a3b8;
+    -fx-padding: 3;
     -fx-shape: "M 0 0 L 4 4 L 8 0 Z";
 }
 
-/* ── Brush slider ── */
+/* ================================================================
+   Brush / Eraser slider
+   ================================================================ */
+
 .brush-slider {
     -fx-pref-height: 30;
     -fx-min-height: 30;
-    -fx-padding: 0;
+    -fx-padding: 0 2 0 2;
 }
 
 .brush-slider .track {
@@ -108,25 +204,35 @@
 }
 
 .brush-slider .thumb {
-    -fx-background-color: #6366f1;
-    -fx-background-radius: 999;
-    -fx-pref-width: 16;
-    -fx-pref-height: 16;
-    -fx-min-width: 16;
-    -fx-min-height: 16;
-    -fx-background-insets: 0;
-    -fx-effect: dropshadow(gaussian, rgba(99, 102, 241, 0.4), 8, 0.25, 0, 1);
+    -fx-background-color: #ffffff, #6366f1;
+    -fx-background-insets: 0, 3;
+    -fx-background-radius: 999, 999;
+    -fx-pref-width: 20;
+    -fx-pref-height: 20;
+    -fx-min-width: 20;
+    -fx-min-height: 20;
+    -fx-border-color: #6366f1;
+    -fx-border-width: 2.5;
+    -fx-border-radius: 999;
+    -fx-effect: dropshadow(gaussian, rgba(99, 102, 241, 0.35), 6, 0.2, 0, 1);
 }
 
 .brush-slider .thumb:hover {
-    -fx-background-color: #4f46e5;
+    -fx-background-color: #eef2ff, #4f46e5;
+    -fx-border-color: #4f46e5;
+    -fx-effect: dropshadow(gaussian, rgba(99, 102, 241, 0.55), 10, 0.3, 0, 1);
 }
 
 .brush-slider .thumb:pressed {
-    -fx-background-color: #4338ca;
+    -fx-background-color: #e0e7ff, #4338ca;
+    -fx-border-color: #4338ca;
+    -fx-effect: dropshadow(gaussian, rgba(67, 56, 202, 0.5), 8, 0.25, 0, 1);
 }
 
-/* ── Buttons (shared base) ── */
+/* ================================================================
+   Buttons (shared base)
+   ================================================================ */
+
 .tool-btn {
     -fx-cursor: hand;
     -fx-font-family: "Segoe UI", system;
@@ -135,61 +241,108 @@
     -fx-background-radius: 8;
     -fx-border-radius: 8;
     -fx-border-width: 1;
-    -fx-pref-height: 30;
+    -fx-pref-height: 32;
     -fx-padding: 0 14 0 14;
-    -fx-background-color: #f8fafc;
-    -fx-border-color: #cbd5e1;
-    -fx-text-fill: #334155;
+    -fx-background-color: #ffffff;
+    -fx-border-color: #e2e8f0;
+    -fx-text-fill: #475569;
+    -fx-effect: dropshadow(gaussian, rgba(15, 23, 42, 0.05), 3, 0.1, 0, 1);
 }
 
 .tool-btn:hover {
     -fx-background-color: #eef2ff;
     -fx-border-color: #a5b4fc;
+    -fx-text-fill: #4338ca;
+    -fx-effect: dropshadow(gaussian, rgba(99, 102, 241, 0.15), 8, 0.15, 0, 1);
 }
 
 .tool-btn:pressed {
-    -fx-scale-x: 0.97;
-    -fx-scale-y: 0.97;
+    -fx-scale-x: 0.96;
+    -fx-scale-y: 0.96;
+    -fx-effect: none;
+}
+
+/* ── Active toggle state (set via code) ── */
+.tool-btn-active {
+    -fx-background-color: #eef2ff;
+    -fx-border-color: #818cf8;
+    -fx-text-fill: #4338ca;
+    -fx-effect: dropshadow(gaussian, rgba(99, 102, 241, 0.2), 8, 0.15, 0, 1);
 }
 
 /* ── Nav buttons ── */
 .nav-btn {
-    -fx-pref-width: 30;
+    -fx-pref-width: 32;
+    -fx-pref-height: 32;
     -fx-padding: 0;
     -fx-font-size: 14px;
 }
 
+/* ── Slide badge (between nav arrows) ── */
+.slide-badge {
+    -fx-background-color: linear-gradient(to bottom, #eef2ff, #e0e7ff);
+    -fx-background-radius: 8;
+    -fx-border-color: #c7d2fe;
+    -fx-border-radius: 8;
+    -fx-border-width: 1;
+    -fx-text-fill: #4338ca;
+    -fx-font-size: 12px;
+    -fx-font-weight: 800;
+    -fx-padding: 4 14 4 14;
+    -fx-min-width: 36;
+    -fx-alignment: center;
+}
+
 /* ── Primary (accent) button ── */
 .primary-btn {
-    -fx-background-color: #6366f1;
+    -fx-background-color: linear-gradient(to bottom, #818cf8, #6366f1);
     -fx-border-color: #6366f1;
     -fx-text-fill: #ffffff;
-    -fx-padding: 0 16 0 16;
+    -fx-padding: 0 18 0 18;
+    -fx-effect: dropshadow(gaussian, rgba(99, 102, 241, 0.35), 10, 0.2, 0, 2);
 }
 
 .primary-btn:hover {
-    -fx-background-color: #4f46e5;
+    -fx-background-color: linear-gradient(to bottom, #6366f1, #4f46e5);
     -fx-border-color: #4f46e5;
+    -fx-effect: dropshadow(gaussian, rgba(99, 102, 241, 0.5), 14, 0.25, 0, 2);
 }
 
 /* ── Danger button ── */
 .danger-btn {
-    -fx-background-color: #fef2f2;
+    -fx-background-color: #ffffff;
     -fx-border-color: #fecaca;
     -fx-text-fill: #dc2626;
+    -fx-effect: dropshadow(gaussian, rgba(220, 38, 38, 0.06), 3, 0.1, 0, 1);
 }
 
 .danger-btn:hover {
-    -fx-background-color: #fee2e2;
+    -fx-background-color: #fef2f2;
     -fx-border-color: #fca5a5;
+    -fx-text-fill: #b91c1c;
+    -fx-effect: dropshadow(gaussian, rgba(220, 38, 38, 0.15), 8, 0.15, 0, 1);
 }
 
-/* ── Canvas area ── */
+/* ================================================================
+   Canvas area
+   ================================================================ */
+
 .canvas-area {
-    -fx-background-color: #ffffff;
-    -fx-border-color: #e2e8f0;
+    -fx-background-color: #f8fafc;
+    -fx-border-color: transparent;
     -fx-border-width: 0;
 }
+
+/* The inner canvas wrapper for inset shadow effect */
+.canvas-wrapper {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 0;
+    -fx-effect: innershadow(gaussian, rgba(15, 23, 42, 0.08), 16, 0.05, 0, 2);
+}
+
+/* ================================================================
+   Color palette popup
+   ================================================================ */
 
 .color-palette .hyperlink {
     visibility: hidden;
@@ -204,5 +357,80 @@
     -fx-min-height: 0;
     -fx-pref-height: 0;
     -fx-max-height: 0;
+    -fx-padding: 0;
+}
+
+/* ================================================================
+   Status bar
+   ================================================================ */
+
+.status-bar {
+    -fx-background-color: #f8fafc;
+    -fx-border-color: #e2e8f0;
+    -fx-border-width: 1 0 0 0;
+    -fx-min-height: 28;
+    -fx-pref-height: 28;
+    -fx-padding: 0 16 0 16;
+}
+
+.status-text {
+    -fx-text-fill: #94a3b8;
+    -fx-font-size: 10px;
+    -fx-font-weight: 600;
+}
+
+.status-dot {
+    -fx-min-width: 6;
+    -fx-min-height: 6;
+    -fx-pref-width: 6;
+    -fx-pref-height: 6;
+    -fx-background-radius: 999;
+    -fx-background-color: #22c55e;
+    -fx-effect: dropshadow(gaussian, rgba(34, 197, 94, 0.4), 6, 0.3, 0, 0);
+}
+
+/* ================================================================
+   Tooltip styling
+   ================================================================ */
+
+.tooltip {
+    -fx-background-color: #1e293b;
+    -fx-text-fill: #f1f5f9;
+    -fx-font-size: 11px;
+    -fx-font-weight: 600;
+    -fx-background-radius: 6;
+    -fx-padding: 5 10 5 10;
+    -fx-effect: dropshadow(gaussian, rgba(15, 23, 42, 0.25), 10, 0.15, 0, 3);
+}
+
+/* ================================================================
+   Scroll bars (if any views need them)
+   ================================================================ */
+
+.scroll-bar:vertical .track,
+.scroll-bar:horizontal .track {
+    -fx-background-color: transparent;
+}
+
+.scroll-bar:vertical .thumb,
+.scroll-bar:horizontal .thumb {
+    -fx-background-color: #cbd5e1;
+    -fx-background-radius: 999;
+}
+
+.scroll-bar:vertical .thumb:hover,
+.scroll-bar:horizontal .thumb:hover {
+    -fx-background-color: #94a3b8;
+}
+
+.scroll-bar .increment-button,
+.scroll-bar .decrement-button {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+}
+
+.scroll-bar .increment-arrow,
+.scroll-bar .decrement-arrow {
+    -fx-shape: "";
     -fx-padding: 0;
 }
