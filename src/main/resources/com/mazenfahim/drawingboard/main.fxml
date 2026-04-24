@@ -18,7 +18,7 @@
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 
 <!-- Root StackPane lets the top bar float as an overlay -->
-<StackPane fx:id="rootPane"
+<StackPane
            xmlns:fx="http://javafx.com/fxml"
            fx:controller="com.mazenfahim.drawingboard.DrawingController"
            stylesheets="@main.css"
@@ -34,7 +34,7 @@
         </StackPane>
 
         <!-- ─── Bottom toolbar ─── -->
-        <HBox fx:id="toolBar" styleClass="toolbar-strip" alignment="CENTER_LEFT" spacing="8">
+        <HBox styleClass="toolbar-strip" alignment="CENTER_LEFT" spacing="8">
             <padding>
                 <Insets top="8" right="16" bottom="8" left="16"/>
             </padding>
@@ -84,7 +84,7 @@
             <Separator orientation="VERTICAL" styleClass="tool-sep"/>
 
             <!-- ── Theme toggle ── -->
-            <Button fx:id="toggleBg" onAction="#toggleBackground" contentDisplay="GRAPHIC_ONLY">
+            <Button onAction="#toggleBackground" contentDisplay="GRAPHIC_ONLY">
                 <graphic>
                     <FontIcon fx:id="themeIcon" iconLiteral="mdi2w-weather-night" iconSize="15" iconColor="#475569"/>
                 </graphic>

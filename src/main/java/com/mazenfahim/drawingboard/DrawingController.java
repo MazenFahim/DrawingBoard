@@ -10,9 +10,7 @@ import javafx.scene.control.*;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.StrokeType;
@@ -21,7 +19,6 @@ import javafx.animation.FadeTransition;
 import javafx.animation.ParallelTransition;
 import javafx.animation.PauseTransition;
 import javafx.animation.TranslateTransition;
-import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 import org.kordamp.ikonli.javafx.FontIcon;
 
@@ -29,45 +26,29 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class DrawingController implements Initializable {
-    @FXML
-    public Button delete;
-    @FXML
-    public Label currentSlide;
-    @FXML
-    public HBox toolBar;
-    @FXML
-    public Button addSlideBtn;
-    @FXML
-    private Button eraser;
-    @FXML
-    private Canvas canvas;
+    @FXML private Button delete;
+    @FXML private Button addSlideBtn;
+    @FXML private Button eraser;
+    @FXML private Button clear;
+    @FXML private Button maximizeButton;
 
-    @FXML
-    ColorPicker colorPicker;
-    @FXML
-    Slider brushSize;
-    @FXML
-    Button clear;
-    @FXML
-    StackPane mainStackPane;
-    @FXML
-    Slider eraserSize;
-    @FXML
-    Button toggleBg;
-    @FXML
-    private StackPane rootPane;
-    @FXML
-    private VBox rootBox;
-    @FXML
-    private HBox topBar;
-    @FXML
-    private Button maximizeButton;
-    @FXML
-    private Label statusText;
-    @FXML
-    private FontIcon eraserIcon;
-    @FXML
-    private FontIcon themeIcon;
+    @FXML private Label currentSlide;
+
+    @FXML private HBox topBar;
+
+    @FXML private VBox rootBox;
+
+    @FXML private StackPane mainStackPane;
+
+    @FXML private Canvas canvas;
+
+    @FXML private ColorPicker colorPicker;
+
+    @FXML private Slider brushSize;
+    @FXML private Slider eraserSize;
+
+    @FXML private FontIcon eraserIcon;
+    @FXML private FontIcon themeIcon;
 
     // Top Bar Fields
     private final PauseTransition topBarHideDelay = new PauseTransition(Duration.millis(1200));
@@ -136,9 +117,8 @@ public class DrawingController implements Initializable {
                         if (change.wasAdded()) {
                             for (javafx.stage.Window w : change.getAddedSubList()) {
                                 if (mainStackPane.getScene() != null &&
-                                        w instanceof Stage &&
+                                        w instanceof Stage dialog &&
                                         w != mainStackPane.getScene().getWindow()) {
-                                    Stage dialog = (Stage) w;
                                     dialog.setOnHidden(e -> {
                                         if (mainStackPane.getScene() != null) {
                                             Stage mainStage = (Stage) mainStackPane.getScene().getWindow();
@@ -294,9 +274,7 @@ public class DrawingController implements Initializable {
     @FXML
     public void toggleBackground() {
         darkMode = !darkMode;
-        mainStackPane.setStyle(darkMode
-                ? "-fx-background-color: #000000;"
-                : "-fx-background-color: #ffffff;");
+        mainStackPane.setBackground(Background.fill(darkMode ? Color.BLACK : Color.WHITE));
         themeIcon.setIconLiteral(darkMode ? "mdi2w-white-balance-sunny" : "mdi2w-weather-night");
     }
 
@@ -456,16 +434,13 @@ public class DrawingController implements Initializable {
         canvas.widthProperty().bind(mainStackPane.widthProperty());
         canvas.heightProperty().bind(mainStackPane.heightProperty());
         mainStackPane.getChildren().removeIf(node -> node instanceof Canvas);
-        mainStackPane.getChildren().add(0, canvas);
+        mainStackPane.getChildren().addFirst(canvas);
     }
 
     private void updateCurrentSlide() {
         if (Slide.getCurrentCanvas() != null) {
             int idx = Slide.currentSlideIndex + 1;
             currentSlide.textProperty().bind(new SimpleIntegerProperty(idx).asString());
-            if (statusText != null) {
-                statusText.setText("Ready  ·  Slide " + idx);
-            }
         }
         delete.setDisable(Slide.size() <= 1);
         addSlideBtn.setDisable(!Slide.canAddSlide());
@@ -526,7 +501,7 @@ public class DrawingController implements Initializable {
     }
 
     @FXML
-    private void handleRootMouseExit(MouseEvent event) {
+    private void handleRootMouseExit() {
         scheduleTopBarHide();
     }
 
@@ -572,9 +547,7 @@ public class DrawingController implements Initializable {
             slide.setToY(TOP_BAR_HIDE_OFFSET);
 
             ParallelTransition transition = new ParallelTransition(fade, slide);
-            transition.setOnFinished(e -> {
-                topBar.setVisible(false);
-            });
+            transition.setOnFinished(e -> topBar.setVisible(false));
             transition.play();
         }
     }
