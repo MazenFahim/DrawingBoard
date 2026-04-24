@@ -123,7 +123,7 @@
                 </Button>
             </HBox>
 
-            <Button text="+ New Slide" onAction="#addSlide">
+            <Button fx:id="addSlideBtn" text="+ New Slide" onAction="#addSlide">
                 <tooltip><Tooltip text="Add new slide"/></tooltip>
                 <styleClass>
                     <String fx:value="tool-btn"/>

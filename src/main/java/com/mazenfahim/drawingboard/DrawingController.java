@@ -3,6 +3,7 @@ package com.mazenfahim.drawingboard;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Cursor;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
@@ -34,6 +35,8 @@ public class DrawingController implements Initializable {
     public Label currentSlide;
     @FXML
     public HBox toolBar;
+    @FXML
+    public Button addSlideBtn;
     @FXML
     private Button eraser;
     @FXML
@@ -175,6 +178,14 @@ public class DrawingController implements Initializable {
                             toggleEraser();
                             event.consume();
                         }
+                        case DELETE, D -> {
+                            deleteSlide();
+                            event.consume();
+                        }
+                        case R -> {
+                            addSlide();
+                            event.consume();
+                        }
                         default -> {
                         }
                     }
@@ -194,6 +205,7 @@ public class DrawingController implements Initializable {
         });
 
         setupWindowBar();
+        updateCurrentSlide();
     }
 
     private void buildEraserPreview() {
@@ -250,6 +262,7 @@ public class DrawingController implements Initializable {
 
     @FXML
     public void deleteSlide() {
+        if (Slide.size() <= 1) return;
         Slide.deleteSlide(mainStackPane);
         if (Slide.getCurrentCanvas() != null) {
             switchToCanvas(Slide.getCurrentCanvas());
@@ -265,11 +278,13 @@ public class DrawingController implements Initializable {
         if (eraserActive) {
             eraser.getStyleClass().add("tool-btn-active");
             eraserIcon.setIconColor(Color.web("#4338ca"));
+            canvas.setCursor(Cursor.NONE);
         } else {
             if (gc != null) {
                 gc.setStroke(colorPicker.getValue());
                 gc.setLineWidth(brushSize.getValue());
             }
+            canvas.setCursor(Cursor.CROSSHAIR);
             eraser.getStyleClass().remove("tool-btn-active");
             eraserIcon.setIconColor(Color.web("#475569"));
             if (cursorOverlay != null) cursorOverlay.setVisible(false);
@@ -302,6 +317,7 @@ public class DrawingController implements Initializable {
             cursorOverlay.setVisible(false);
 
         setupCanvas(canvas);
+        canvas.setCursor(Cursor.CROSSHAIR);
 
         if (cursorOverlay != null)
             cursorOverlay.toFront();
@@ -451,6 +467,8 @@ public class DrawingController implements Initializable {
                 statusText.setText("Ready  ·  Slide " + idx);
             }
         }
+        delete.setDisable(Slide.size() <= 1);
+        addSlideBtn.setDisable(!Slide.canAddSlide());
     }
 
     @FXML

@@ -25,6 +25,7 @@ public class DrawingApplication extends Application {
         );
         stage.initStyle(StageStyle.UNDECORATED);
         stage.getIcons().add(icon);
+        stage.setResizable(true);
         stage.setScene(scene);
         stage.show();
     }

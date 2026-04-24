@@ -9,9 +9,11 @@ import java.util.List;
 public class SlidesHandler {
     private final List<Canvas> slidesList = new ArrayList<>();
     public int currentSlideIndex = -1;
+    private static final int MAX_SLIDES = 35;
 
 
     public Canvas addSlide() {
+        if (slidesList.size() >= MAX_SLIDES) return getCurrentCanvas();
         Canvas canvas = new Canvas();
         slidesList.add(canvas);
         currentSlideIndex = slidesList.size() - 1;
@@ -44,5 +46,12 @@ public class SlidesHandler {
             currentSlideIndex--;
         }
         return getCurrentCanvas();
+    }
+    public int size() {
+        return slidesList.size();
+    }
+
+    public boolean canAddSlide() {
+        return slidesList.size() < MAX_SLIDES;
     }
 }
