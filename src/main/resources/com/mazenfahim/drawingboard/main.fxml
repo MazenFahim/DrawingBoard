@@ -20,7 +20,7 @@
 <!-- Root StackPane lets the top bar float as an overlay -->
 <StackPane
            xmlns:fx="http://javafx.com/fxml"
-           fx:controller="com.mazenfahim.drawingboard.DrawingController"
+           fx:controller="com.mazenfahim.drawingboard.controller.DrawingController"
            stylesheets="@main.css"
            onMouseMoved="#handleRootMouseMove"
            onMouseExited="#handleRootMouseExit">

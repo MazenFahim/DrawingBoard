@@ -1,5 +1,6 @@
-package com.mazenfahim.drawingboard;
+package com.mazenfahim.drawingboard.controller;
 
+import com.mazenfahim.drawingboard.SlidesHandler;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -164,6 +165,10 @@ public class DrawingController implements Initializable {
                         }
                         case R -> {
                             addSlide();
+                            event.consume();
+                        }
+                        case M -> {
+                            toggleBackground();
                             event.consume();
                         }
                         default -> {
